@@ -1,0 +1,77 @@
+class Game
+	values
+		
+	types
+	
+	instance variables
+		private turn : Utilities`Color := <blue>;
+		private board : map Utilities`Pos to Utilities`Color := { |-> };
+		private tiles : seq of Tile := [];
+		
+		inv {1,...,Utilities`boardSize} in set dom board;
+		inv card (rng board) = 1;
+		
+	operations
+		--validate position
+        public ValidPosition: int * int ==> bool
+        ValidPosition(x, y) ==
+        (
+            return x < Utilities`boardSize and y <Utilities`boardSize
+                and (mk_Utilities`Pos(x,y) not in set dom board
+                or board(mk_Utilities`Pos(x,y)) <> nil);
+        );
+        
+        --Initialization
+        public Game: () ==> Game
+        Game() ==
+        (
+            for all y in set {1, ..., Utilities`boardSize} do
+                for all x in set {1, ..., Utilities`boardSize} do
+                    board := board munion {
+                        mk_Utilities`Pos(x, y) |-> <empty>
+                    };
+                    
+            --initialize tiles here
+        );
+        
+        public initializeTiles: () ==> ()
+        	initializeTiles() ==
+        	(
+        		dcl t:Tile = [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,1)]
+        		tiles := tiles ^ t
+        	);
+        
+        public placeTile: Utilities`Pos * Tile ==> bool
+        	placeTile(p, t) == 
+        	(
+        		
+        		return true;
+        	)
+        	pre isEmpty(p, t);
+        
+        public getCurrentPlayer: () ==> Utilities`Color
+        	getCurrentPlayer() == return turn;
+        	
+		public changeTurn: () ==> ()
+        changeTurn() ==
+        (
+            if turn = <blue>
+                then turn := <yellow>
+            else
+                turn := <blue>
+        )
+        post turn <> turn~;
+
+        public isEmpty: Utilities`Pos * Tile ==> bool
+        	isEmpty(p, t) == 
+        	(
+        		return false
+    		)
+        ;
+        
+	functions
+-- TODO Define functiones here
+
+	traces
+-- TODO Define Combinatorial Test Traces here
+end Game

@@ -1,0 +1,72 @@
+class Tile
+
+	instance variables
+		private shape : seq of Utilities`Pos := [];
+		private corners : seq of Utilities`Pos := [];
+		private maxX:nat1 := 0;
+		private maxY:nat1 := 1;
+		private newMaxX:nat1 := 0;
+		private newMaxY:nat1 := 0;
+		private shift:nat1 :=0;
+		
+	operations
+        public rotate:() ==> ()
+        rotate() ==
+        (
+        	dcl newShape: seq of Utilities`Pos := [];
+        	dcl newCorners: seq of Utilities`Pos := [];
+        	
+        	for all s in set elems shape do (
+        		dcl newY: nat1 := 1-( s.x - (maxX-2) );
+        		dcl point: Utilities`Pos := mk_Utilities`Pos( s.y, newY);
+        		
+	        	newShape := newShape ^ [point];
+	        	
+	        	if newY < shift then
+	        		shift := newY;
+	        	
+                if s.y > newMaxX then
+					newMaxX := s.y+1;
+					
+				if newY > newMaxY then
+					newMaxY := newY;
+				
+				if s in set elems corners then
+	        		newCorners := newCorners ^ [point];
+            );
+            
+            --shift if needed
+            if shift < 0 then (
+            	dcl newShapeAux: seq of Utilities`Pos := [];
+        		dcl newCornersAux: seq of Utilities`Pos := [];
+	            for all s in set elems newShape do (
+	        		dcl newY: nat1 := s.y-shift;
+	        		dcl point: Utilities`Pos := mk_Utilities`Pos( s.x, newY);
+	        		
+		        	newShapeAux := newShapeAux ^ [point];
+		        	
+		        	if newY < shift then
+		        		shift := newY;
+		        	
+	                if s.y > newMaxX then
+						newMaxX := s.y+1;
+						
+					if newY > newMaxY then
+						newMaxY := newY;
+					
+					if s in set elems corners then
+		        		newCorners := newCorners ^ [point];
+	            );
+            );
+            
+            
+            
+            maxY := newMaxY;
+            newMaxY := 0;
+            maxX := newMaxY;
+            
+            shape := newShape;
+            corners := newCorners;
+        );
+        
+end Tile

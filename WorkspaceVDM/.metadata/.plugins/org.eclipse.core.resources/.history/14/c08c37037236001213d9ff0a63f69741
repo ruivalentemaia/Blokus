@@ -1,0 +1,47 @@
+class Tile
+
+	instance variables
+		private shape : seq of Utilities`Pos := [];
+		private corners : seq of Utilities`Pos := [];
+		private maxSize:nat1 := 1;
+		private maxX:nat1 := 0;
+		private newMaxX:nat1 := 0;
+		private newMaxY:nat1 := 0;
+		private shift:nat1 :=0;
+		
+	operations
+        public rotate:() ==> ()
+        rotate() ==
+        (
+        	dcl newShape: seq of Utilities`Pos := [];
+        	dcl newCorners: seq of Utilities`Pos := [];
+        	
+        	for all s in set elems shape do (
+        		dcl newy: nat1 := 1-( s.x - (maxSize-2) );
+        		dcl point: Utilities`Pos := mk_Utilities`Pos( s.y, newy);
+        		
+	        	newShape := newShape ^ [point];
+	        	
+	        	if newy < shift then
+	        		shift := newy;
+	        	
+	        	if s in set elems corners then
+	        		newCorners := newCorners ^ [point];
+	        	
+	        	
+                if s.y > newMaxX then
+					newMaxX := s.y+1;
+					
+				if newy > newMaxY then
+					newMaxSize := s.y;
+            );
+            
+            maxSize := newMaxSize;
+            newMaxSize := 0;
+            maxX := newMaxY;
+            
+            shape := newShape;
+            corners := newCorners;
+        );
+        
+end Tile

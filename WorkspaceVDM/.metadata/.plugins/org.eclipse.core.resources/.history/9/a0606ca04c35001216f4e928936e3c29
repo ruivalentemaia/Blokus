@@ -1,0 +1,20 @@
+class Utilities
+	types
+		public Position ::  x : nat
+							y : nat;
+		public String = seq of char;
+		
+		public Color = <blue> | <yellow> | <red> | <green> | <none>;
+		
+	values
+		public boardSize: nat1 = 20;
+		
+	instance variables
+-- TODO Define instance variables here
+	operations
+-- TODO Define operations here
+	functions
+-- TODO Define functiones here
+	traces
+-- TODO Define Combinatorial Test Traces here
+end Utilities

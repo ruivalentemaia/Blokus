@@ -1,0 +1,6 @@
+Ordem de inicio : Azul[B], Amarelo[Y], Vermelho[R], Verde[G]
+A primeira peça tem de ser colocada num dos 4 cantos do tabuleiro.
+Todas as peças seguintes têm de tocar canto-a-canto pelo menos 1 peça da mesma cor.
+Arestas de uma peça só se podem tocar se forem de cores diferentes
+Senão tiver como colocar uma peça o jogador pode passar a vez.
+O jogo acaba quando ninguem conseguir realizar uma jogada.

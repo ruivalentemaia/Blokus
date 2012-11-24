@@ -1,0 +1,20 @@
+class Utilities
+	values
+		public boardSize: nat1 = 20;
+
+	types
+		        public Pos :: xx:nat1 yy:nat1
+        inv var == var.xx <= WIDTH and var.yy <= HEIGHT;
+		public String = seq of char;
+		
+		public Color = <blue> | <yellow> | <red> | <green> | <none>;
+		
+	instance variables
+-- TODO Define instance variables here
+	operations
+-- TODO Define operations here
+	functions
+-- TODO Define functiones here
+	traces
+-- TODO Define Combinatorial Test Traces here
+end Utilities
