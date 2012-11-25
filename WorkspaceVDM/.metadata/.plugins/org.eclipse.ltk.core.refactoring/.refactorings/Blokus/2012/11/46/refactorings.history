@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;Blokus/Board.vdmpp&apos; to &apos;Game.vdmpp&apos;" description="Rename resource &apos;Board.vdmpp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Board.vdmpp" name="Game.vdmpp" stamp="1353080483267" updateReferences="true"/>
-</session>

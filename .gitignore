@@ -1,8 +1,8 @@
 # Package Files #
-Workspace/.metadata/
-Workspace/TileRotation/bin/
-Workspace/TileRotation/.settings/
-Workspace/TileRotation/.classpath
-Workspace/TileRotation/.project
-WorkspaceVDM/.metadata/
-WorkspaceVDM/Blokus/.project
+/Workspace/.metadata/
+/Workspace/TileRotation/bin/
+/Workspace/TileRotation/.settings/
+/Workspace/TileRotation/.classpath
+/Workspace/TileRotation/.project
+/WorkspaceVDM/.metadata/
+/WorkspaceVDM/Blokus/.project
