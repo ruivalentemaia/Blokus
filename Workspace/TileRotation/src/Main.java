@@ -3,43 +3,44 @@ import java.util.ArrayList;
 public class Main {
 	public static void main(String[] args) {
 		ArrayList<Pair> figure = new ArrayList<Pair>();
-		// bot
-		/*
-		figure.add(new Pair(0,0));
-		figure.add(new Pair(0,1));
-		figure.add(new Pair(0,2));
-		figure.add(new Pair(1,0));
-		figure.add(new Pair(1,1));
-		int maxY = 2;
-		int maxX = 1;
-		/*/
 		
+		/*
+		//figura 1
 		figure.add(new Pair(1,0));
 		figure.add(new Pair(1,1));
 		figure.add(new Pair(0,1));
-		int maxY = 1;
-		int maxX = 0;
-		
-		/*
-		figure.add(new Pair(0,0));
-		figure.add(new Pair(0,1));
-		figure.add(new Pair(0,2));
-		figure.add(new Pair(1,1));
-		int maxY = 2;
-		int maxX = 1;
-		*/
-		
 
+		//figura 6
+		figure.add(new Pair(0,0));
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(0,2));
+		figure.add(new Pair(1,1));
+		*/
+		//figura 16
+		figure.add(new Pair(0,0));
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(0,2));
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(1,1));
 		
-		int newMaxY = 0, newMaxX = 0;
+		//variáveis de transformação
+		int maxX = 0, maxY = 0, newMaxY = 0, newMaxX = 0;
+		
 		for (int i = 0; i< 11; i++) {
 			
 			System.out.println("----------------------------------------");
 			for (int y = 0; y < 10; y++) {
 	
 				for (int x = 0; x < 10; x++) {
-					if (figure.contains(new Pair(x, y)))
-						System.out.print(" B |");
+					Pair p = new Pair(x, y);
+					if (figure.contains(p)) {
+						System.out.print(" * |");
+						if (p.x < maxX)
+							maxX = p.x;
+						
+						if (p.y > maxY)
+							maxY = p.y;
+					}
 					else
 						System.out.print("   |");
 	
@@ -61,7 +62,7 @@ public class Main {
 	
 				for (int x = 0; x < 10; x++) {
 					if (figureM.contains(new Pair(x, y)))
-						System.out.print(" B |");
+						System.out.print(" * |");
 					else
 						System.out.print("   |");
 	

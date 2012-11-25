@@ -3,35 +3,53 @@ class Tile
 	instance variables
 		private shape : seq of Utilities`Pos := [];
 		private corners : seq of Utilities`Pos := [];
-		private maxX:nat1 := 0;
-		private maxY:nat1 := 1;
-		private newMaxX:nat1 := 0;
-		private newMaxY:nat1 := 0;
-		private shift:nat1 :=0;
+		private maxX:nat := 0;
+		private maxY:nat := 0;
+		private newMaxX:nat := 0;
+		private newMaxY:nat := 0;
+		private shift:nat :=0;
 		
 	operations
+		public Tile: seq of Utilities`Pos * seq of Utilities`Pos ==> Tile
+		Tile (s,c) == (
+		
+			shape := s;
+			corners := c;
+			for all p in set elems shape do (
+	        	
+                if p.x > maxX then
+					maxX := p.x;
+					
+				if p.y > maxY then
+					maxY := p.y;
+            );
+			
+			return self;
+		)
+		post shape <> [] and corners <> [];
+	
         public rotate:() ==> ()
-        rotate() ==
-        (
+        rotate() == (
+        
         	dcl newShape: seq of Utilities`Pos := [];
         	dcl newCorners: seq of Utilities`Pos := [];
         	
-        	for all s in set elems shape do (
-        		dcl newY: nat1 := 1-( s.x - (maxX-2) );
-        		dcl point: Utilities`Pos := mk_Utilities`Pos( s.y, newY);
+        	for all p in set elems shape do (
+        		dcl newY: nat := ( 1-( p.x - (maxX-2) ) );
+        		dcl point: Utilities`Pos := mk_Utilities`Pos( p.y, newY);
         		
 	        	newShape := newShape ^ [point];
 	        	
 	        	if newY < shift then
 	        		shift := newY;
 	        	
-                if s.y > newMaxX then
-					newMaxX := s.y;
+                if p.y > newMaxX then
+					newMaxX := p.y;
 					
 				if newY > newMaxY then
 					newMaxY := newY;
 				
-				if s in set elems corners then
+				if p in set elems corners then
 	        		newCorners := newCorners ^ [point];
             );
             
@@ -39,19 +57,19 @@ class Tile
             if shift < 0 then (
             	dcl newShapeAux: seq of Utilities`Pos := [];
         		dcl newCornersAux: seq of Utilities`Pos := [];
-	            for all s in set elems newShape do (
-	        		dcl newY: nat1 := s.y-shift;
-	        		dcl point: Utilities`Pos := mk_Utilities`Pos( s.x, newY);
+	            for all p in set elems newShape do (
+	        		dcl newY: nat := (p.y-shift);
+	        		dcl point: Utilities`Pos := mk_Utilities`Pos( p.x, newY);
 	        		
 		        	newShapeAux := newShapeAux ^ [point];
 		        	
-	                if s.x > newMaxX then
-						newMaxX := s.x;
+	                if p.x > newMaxX then
+						newMaxX := p.x;
 						
 					if newY > newMaxY then
 						newMaxY := newY;
 					
-					if s in set elems newCorners then
+					if p in set elems newCorners then
 		        		newCornersAux := newCornersAux ^ [point];
 	            );
 	            newShape :=newShapeAux;
@@ -65,6 +83,52 @@ class Tile
             shift:=0;
             shape := newShape;
             corners := newCorners;
-        );
+        )
+        post shape <> [] and corners <> [];
+        
+        public invert:() ==> ()
+        invert() == (
+        	dcl newShape: seq of Utilities`Pos := [];
+        	dcl newCorners: seq of Utilities`Pos := [];
+        	
+        	for all p in set elems shape do (
+        		dcl newY: nat := (maxY-p.y);
+        		dcl point: Utilities`Pos := mk_Utilities`Pos( p.y, newY);
+        		
+	        	newShape := newShape ^ [point];
+	        	
+	        	if newY < shift then
+	        		shift := newY;
+	        	
+                if p.y > newMaxX then
+					newMaxX := p.y;
+					
+				if newY > newMaxY then
+					newMaxY := newY;
+				
+				if p in set elems corners then
+	        		newCorners := newCorners ^ [point];
+            );
+            
+            maxX := newMaxX;
+            maxY := newMaxY;
+            newMaxY := 0;
+            newMaxX := 0;
+            shift:=0;
+            shape := newShape;
+            corners := newCorners;
+        	
+        )
+        post shape <> [] and corners <> [];
+        
+        public getShape: () ==> seq of Utilities`Pos
+        	getShape() == (
+        		return self.shape
+        	);
+        	
+    	public getCorners: () ==> seq of Utilities`Pos
+        	getCorners() == (
+        		return self.corners
+        	);
         
 end Tile

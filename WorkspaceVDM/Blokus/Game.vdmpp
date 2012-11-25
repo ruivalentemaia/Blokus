@@ -12,65 +12,80 @@ class Game
 		inv card (rng board) = 1;
 		
 	operations
-		--validate position
-        public ValidPosition: int * int ==> bool
-        ValidPosition(x, y) ==
-        (
-            return x < Utilities`boardSize and y <Utilities`boardSize
-                and (mk_Utilities`Pos(x,y) not in set dom board
-                or board(mk_Utilities`Pos(x,y)) <> nil);
-        );
-        
         --Initialization
         public Game: () ==> Game
-        Game() ==
-        (
-            for all y in set {0, ..., Utilities`boardSize-1} do
-                for all x in set {0, ..., Utilities`boardSize-1} do
-                    board := board munion {
-                        mk_Utilities`Pos(x, y) |-> <empty>
-                    };
-                    
-            --initialize tiles here
-        );
+	        Game() ==
+	        (
+	            for all y in set {0, ..., Utilities`boardSize-1} do
+	                for all x in set {0, ..., Utilities`boardSize-1} do
+	                    board := board munion {
+	                        mk_Utilities`Pos(x, y) |-> <empty>
+	                    };
+	                    
+	            initializeTiles()
+	        );
         
         public initializeTiles: () ==> ()
         	initializeTiles() ==
-        	(
-        		dcl t1:Tile;
-        		t1.shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1)];
-        		t1.maxX := 2;
+        	(        		
+        		dcl shape:seq of Utilities`Pos := [];
+        		dcl corners:seq of Utilities`Pos := [];
+        		dcl t:Tile;
         		
-        		tiles := tiles ^ [t1]
+        		--figura 3
+        		shape := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(0,1)];
+        		corners := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(0,1)];
+        		t := new Tile(shape,corners); 
+        		tiles := tiles ^ [t];
+        		
+        		--figura 6
+        		shape := [mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,1)];
+        		corners :=  [mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,1)];
+        		t := new Tile(shape,corners); 
+        		tiles := tiles ^ [t];
+        		
+        		--figura 16
+        		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1)];
+        		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1)];
+        		t := new Tile(shape,corners); 
+        		tiles := tiles ^ [t];
+        		
         	);
         
-        public placeTile: Utilities`Pos * Tile ==> bool
-        	placeTile(p, t) == 
-        	(
-        		
-        		return true;
-        	)
-        	pre isEmpty(p, t);
+        --validate position
+        public ValidPosition: Tile * Utilities`Color * Utilities`Pos ==> bool
+	        ValidPosition(t, c, p) == (
+	        	dcl shape : seq of Utilities`Pos := t.getShape();
+	        	
+	        	--verificar se apartir daquela posição o tabuleiro está vazio e é válido para aquela cor
+	        	
+	        	for all p in set elems shape do (
+	        	
+
+	        		return true;
+	        	);
+	            return false
+	        );
+        
+        public placeTile: Tile * Utilities`Color * Utilities`Pos ==> bool
+	    	placeTile(t, c, p) == (
+	    	
+	    		return true;
+	    	)
+	    	pre ValidPosition(t, c, p);
         
         public getCurrentPlayer: () ==> Utilities`Color
-        	getCurrentPlayer() == return turn;
+    		getCurrentPlayer() == return turn;
         	
 		public changeTurn: () ==> ()
-        changeTurn() ==
-        (
-            if turn = <blue>
-                then turn := <yellow>
-            else
-                turn := <blue>
-        )
-        post turn <> turn~;
-
-        public isEmpty: Utilities`Pos * Tile ==> bool
-        	isEmpty(p, t) == 
-        	(
-        		return false
-    		)
-        ;
+	        changeTurn() ==
+	        (
+	            if turn = <blue>
+	                then turn := <yellow>
+	            else
+	                turn := <blue>
+	        )
+	        post turn <> turn~;
         
 	functions
 -- TODO Define functiones here
