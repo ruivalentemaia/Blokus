@@ -8,21 +8,22 @@ class Game
 		private board : map Utilities`Pos to Utilities`Color := { |-> };
 		private tiles : seq of Tile := [];
 		
-		inv {1,...,Utilities`boardSize} in set dom board;
+		--inv {0,...,Utilities`boardSize-1} in set dom board;
+		inv forall p in set dom board & p.x in set {0,...,Utilities`boardSize-1} and p.y in set {0,...,Utilities`boardSize-1};
 		inv card (rng board) = 1;
 		
 	operations
         --Initialization
         public Game: () ==> Game
-	        Game() ==
-	        (
-	            for all y in set {0, ..., Utilities`boardSize-1} do
-	                for all x in set {0, ..., Utilities`boardSize-1} do
+	        Game() == (
+	            for all x in set {0, ..., Utilities`boardSize-1} do
+	                for all y in set {0, ..., Utilities`boardSize-1} do
 	                    board := board munion {
 	                        mk_Utilities`Pos(x, y) |-> <empty>
 	                    };
 	                    
 	            initializeTiles()
+	            
 	        );
         
         public initializeTiles: () ==> ()
@@ -54,14 +55,13 @@ class Game
         
         --validate position
         public ValidPosition: Tile * Utilities`Color * Utilities`Pos ==> bool
-	        ValidPosition(t, c, p) == (
+	        ValidPosition(t, c, d) == (
 	        	dcl shape : seq of Utilities`Pos := t.getShape();
 	        	
 	        	--verificar se apartir daquela posição o tabuleiro está vazio e é válido para aquela cor
 	        	
 	        	for all p in set elems shape do (
 	        	
-
 	        		return true;
 	        	);
 	            return false
@@ -78,14 +78,25 @@ class Game
     		getCurrentPlayer() == return turn;
         	
 		public changeTurn: () ==> ()
-	        changeTurn() ==
-	        (
+	        changeTurn() == (
+	        
 	            if turn = <blue>
 	                then turn := <yellow>
 	            else
 	                turn := <blue>
 	        )
 	        post turn <> turn~;
+        
+        public getBoard: () ==> map Utilities`Pos to Utilities`Color
+        	getBoard() == (
+        		return self.board
+        	);
+        	
+    	public getTurn: () ==> Utilities`Color
+        	getTurn() == (
+        		return self.turn
+        	);
+        
         
 	functions
 -- TODO Define functiones here

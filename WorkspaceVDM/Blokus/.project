@@ -12,6 +12,10 @@
 					<key>LANGUAGE_VERSION</key>
 					<value>classic</value>
 				</dictionary>
+				<dictionary>
+					<key>SUPPRESS_WARNINGS</key>
+					<value>false</value>
+				</dictionary>
 			</arguments>
 		</buildCommand>
 	</buildSpec>

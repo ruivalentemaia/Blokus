@@ -1,0 +1,9 @@
+class Tests
+	operations
+
+	public runAllTests : () ==> ()
+	runAllTests () == (
+		GameTest`runAllTests()
+	);
+
+end Tests
