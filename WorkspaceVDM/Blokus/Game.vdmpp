@@ -57,14 +57,17 @@ class Game
         public ValidPosition: Tile * Utilities`Color * Utilities`Pos ==> bool
 	        ValidPosition(t, c, d) == (
 	        	dcl shape : seq of Utilities`Pos := t.getShape();
-	        	
+	        	dcl finalPlace:Tile;
+	        	dcl shape:seq of Utilities`Pos := [];
+    			dcl corners:seq of Utilities`Pos := [];
 	        	--verificar se apartir daquela posição o tabuleiro está vazio e é válido para aquela cor
 	        	
 	        	for all p in set elems shape do (
-	        	
-	        		return true;
+	        		
+	        		if board(p) <> <empty> then
+	        			return false;
 	        	);
-	            return false
+	            return true
 	        );
         
         public placeTile: Tile * Utilities`Color * Utilities`Pos ==> bool

@@ -1,7 +1,8 @@
 # Package Files #
+.gitignore~
 /Workspace/.metadata/
 /Workspace/TileRotation/bin/
 /Workspace/TileRotation/.settings/
 /Workspace/TileRotation/.classpath
+/WorkspaceVDM/Blokus/generated/
 /WorkspaceVDM/.metadata/
-/WorkspaceVDM/.metadata/Blokus/generated/
