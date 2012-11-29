@@ -7,7 +7,7 @@ class Tile
 		private maxY:nat := 0;
 		private newMaxX:nat := 0;
 		private newMaxY:nat := 0;
-		private shift:nat :=0;
+		private shift:int :=0;
 		
 	operations
 		public Tile: seq of Utilities`Pos * seq of Utilities`Pos ==> Tile
@@ -27,7 +27,7 @@ class Tile
 			return self;
 		)
 		post shape <> [] and corners <> [];
-	
+		--FIXME:valores negativos FUUUUUUUU
         public rotate:() ==> ()
         rotate() == (
         
@@ -35,7 +35,7 @@ class Tile
         	dcl newCorners: seq of Utilities`Pos := [];
         	
         	for all p in set elems shape do (
-        		dcl newY: nat := ( 1-( p.x - (maxX-2) ) );
+        		dcl newY: int := ( 1-( p.x - (maxX-2) ) );
         		dcl point: Utilities`Pos := mk_Utilities`Pos( p.y, newY);
         		
 	        	newShape := newShape ^ [point];

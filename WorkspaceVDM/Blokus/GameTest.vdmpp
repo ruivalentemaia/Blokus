@@ -6,35 +6,97 @@ class GameTest
 		AssertTrue(a) == return
     pre a;
 
-
 	static public runAllTests : () ==> ()
 		runAllTests () == (
+		
 			testInitGame1();
 			testInitGame2();
 			testChangeTurn();
+			testValidCorner1();
+			testValidCorner2();
+			testPlaceFirstTile1();
+			testPlaceFirstTile2();
+			testValidPosition1();
+			testValidPosition2();
 		);
 
 
 	static public testInitGame1 : () ==> ()
-	testInitGame1 () ==
-	( dcl g : Game := new Game();
+	testInitGame1 () == (
+		
+		dcl g : Game := new Game();
 		AssertTrue(card ( rng g.getBoard() ) = 1 )
 	);
 	
 	static public testInitGame2 : () ==> ()
-	testInitGame2 () ==
-	( dcl g : Game := new Game();
+	testInitGame2 () == (
+
+		dcl g : Game := new Game();
 		AssertTrue(g.getTurn() = <blue> )
 	);
 	
 	static public testChangeTurn : () ==> ()
-	testChangeTurn () ==
-	( dcl g : Game := new Game();
+	testChangeTurn () == (
+		
+		dcl g : Game := new Game();
 		AssertTrue(g.getTurn() = <blue>);
 		g.changeTurn();
 		AssertTrue(g.getTurn() = <yellow>);
 		g.changeTurn();
 		AssertTrue(g.getTurn() = <blue> )
+	);
+	
+	--not a valid corner
+	static public testValidCorner1 : () ==> ()
+	testValidCorner1 () == (
+		
+		dcl g : Game := new Game();
+		AssertTrue(g.validCorner(hd g.getTiles(), mk_Utilities`Pos(5,5)) = false )
+	);
+	
+	--valid corner
+	static public testValidCorner2 : () ==> ()
+	testValidCorner2 () == (
+		
+		dcl g : Game := new Game();
+		AssertTrue(g.validCorner(hd g.getTiles(), mk_Utilities`Pos(0,0)) = true )
+	);
+	
+	--place tile on upper left corner
+	static public testPlaceFirstTile1 : () ==> ()
+	testPlaceFirstTile1 () == (
+		
+		dcl g : Game := new Game();
+		AssertTrue(g.placeFirstTile(hd g.getTiles(), g.getTurn(), mk_Utilities`Pos(0,0)) = true )
+	);
+	
+	--place tile on bottom right corner
+	static public testPlaceFirstTile2 : () ==> ()
+	testPlaceFirstTile2 () == (
+		
+		dcl g : Game := new Game();
+		dcl t:Tile := hd g.getTiles();
+		dcl limit: nat := (Utilities`boardSize -2);
+		t.rotate();
+		AssertTrue(g.placeFirstTile(t, g.getTurn(), mk_Utilities`Pos(limit,limit)) = true )
+	);
+	
+	--validate I can place tile here
+	static public testValidPosition1 : () ==> ()
+	testValidPosition1 () == (
+		
+		dcl g : Game := new Game();
+		AssertTrue(g.validPosition(hd g.getTiles(), <blue>, mk_Utilities`Pos(5,5)) = false )
+	);
+	
+	--validate I can place tile here
+	static public testValidPosition2 : () ==> ()
+	testValidPosition2 () == (
+		
+		dcl g : Game := new Game();
+		dcl t:Tile := hd g.getTiles();
+		t.rotate();
+		AssertTrue(( g.validPosition(hd g.getTiles(), <blue>, mk_Utilities`Pos(0,0)) and g.validPosition(hd g.getTiles(), <blue>, mk_Utilities`Pos(2,1))) = true )
 	);
 
 end GameTest

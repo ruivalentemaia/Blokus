@@ -3,8 +3,7 @@ class Utilities
 		public boardSize: nat = 20;
 
 	types
-        public Pos :: x:nat y:nat
-        inv var == var.x < boardSize and var.y < boardSize;
+        public Pos :: x:int y:int;
         
 		public String = seq of char;
 		

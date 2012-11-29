@@ -4,25 +4,25 @@ public class Main {
 	public static void main(String[] args) {
 		ArrayList<Pair> figure = new ArrayList<Pair>();
 		
-		/*
+		
 		//figura 1
+		figure.add(new Pair(0,0));
 		figure.add(new Pair(1,0));
-		figure.add(new Pair(1,1));
 		figure.add(new Pair(0,1));
-
+/*
 		//figura 6
 		figure.add(new Pair(0,0));
 		figure.add(new Pair(0,1));
 		figure.add(new Pair(0,2));
 		figure.add(new Pair(1,1));
-		*/
+		/*
 		//figura 16
 		figure.add(new Pair(0,0));
 		figure.add(new Pair(0,1));
 		figure.add(new Pair(0,2));
 		figure.add(new Pair(1,0));
 		figure.add(new Pair(1,1));
-		
+		*/
 		//variáveis de transformação
 		int maxX = 0, maxY = 0, newMaxY = 0, newMaxX = 0;
 		

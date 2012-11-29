@@ -7,10 +7,11 @@ class Game
 		private turn : Utilities`Color := <blue>;
 		private board : map Utilities`Pos to Utilities`Color := { |-> };
 		private tiles : seq of Tile := [];
+		private score : map Utilities`Color to nat := { |-> };
 		
-		--inv {0,...,Utilities`boardSize-1} in set dom board;
 		inv forall p in set dom board & p.x in set {0,...,Utilities`boardSize-1} and p.y in set {0,...,Utilities`boardSize-1};
-		inv card (rng board) = 1;
+		--FIXME:isto afinal fica para sempre!
+		--inv card (rng board) = 1;
 		
 	operations
         --Initialization
@@ -21,7 +22,8 @@ class Game
 	                    board := board munion {
 	                        mk_Utilities`Pos(x, y) |-> <empty>
 	                    };
-	                    
+                --initializaze score
+				score := {<blue> |-> 0, <yellow> |-> 0, <red> |-> 0, <green> |-> 0};
 	            initializeTiles()
 	            
 	        );
@@ -34,7 +36,7 @@ class Game
         		dcl t:Tile;
         		
         		--figura 3
-        		shape := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(0,1)];
+        		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1)];
         		corners := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(0,1)];
         		t := new Tile(shape,corners); 
         		tiles := tiles ^ [t];
@@ -54,28 +56,104 @@ class Game
         	);
         
         --validate position
-        public ValidPosition: Tile * Utilities`Color * Utilities`Pos ==> bool
-	        ValidPosition(t, c, d) == (
-	        	dcl shape : seq of Utilities`Pos := t.getShape();
-	        	dcl finalPlace:Tile;
-	        	dcl shape:seq of Utilities`Pos := [];
-    			dcl corners:seq of Utilities`Pos := [];
-	        	--verificar se apartir daquela posição o tabuleiro está vazio e é válido para aquela cor
+        public validPosition: Tile * Utilities`Color * Utilities`Pos ==> bool
+	        validPosition(t, c, d) == (
 	        	
-	        	for all p in set elems shape do (
+    			dcl cornerFound: bool := false;
+	        	
+	        	--verificar se as posiçoes do tabuleiro estao vazias
+	        	for all p in set elems t.getShape() do (
+	        		--FIXME: como se comporta isto se pontos forem extremidades
+	        		dcl newPosition: Utilities`Pos := mk_Utilities`Pos(p.x+d.x,p.y+d.y);
 	        		
-	        		if board(p) <> <empty> then
+	        		dcl left: Utilities`Pos := mk_Utilities`Pos(newPosition.x-1,newPosition.y);
+	        		dcl right: Utilities`Pos := mk_Utilities`Pos(newPosition.x+1,newPosition.y);	        		
+	        		dcl top: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y+1);
+	        		dcl bottom: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y-1);
+
+	        		-- se posição não estiver vazia ou as sua laterais tiver outra peça da mesma cor então erro
+	        		if board(newPosition) <> <empty> or board(right) = c or board(left) = c or board(top) = c or board(bottom) = c then
 	        			return false;
+        			
+        			--verificar se há algum canto
+        			if p in set elems t.getCorners() then (
+	        			dcl upperLeft: Utilities`Pos := mk_Utilities`Pos(newPosition.x-1,newPosition.y-1);
+	        			dcl upperRight: Utilities`Pos := mk_Utilities`Pos(newPosition.x+1,newPosition.y-1);	        		
+	        			dcl bottomLeft: Utilities`Pos := mk_Utilities`Pos(newPosition.x-1,newPosition.y+1);
+	        			dcl bottomRight: Utilities`Pos := mk_Utilities`Pos(newPosition.x+1,newPosition.y+1);
+	        			if board(upperLeft) = c or board(upperRight) = c or board(bottomLeft) = c or board(bottomRight) = c then
+	        				cornerFound := true
+    				);
 	        	);
-	            return true
+	        	
+	        	if cornerFound then
+	            	return true;
+	            	
+            	return false
 	        );
         
         public placeTile: Tile * Utilities`Color * Utilities`Pos ==> bool
-	    	placeTile(t, c, p) == (
-	    	
+	    	placeTile(t, c, d) == (
+	    		
+	        	for all p in set elems t.getShape() do (
+	        			
+        			board := board munion {mk_Utilities`Pos(p.x+d.x,p.y+d.y) |-> c};
+	        	);
+
 	    		return true;
 	    	)
-	    	pre ValidPosition(t, c, p);
+	    	pre validPosition(t, c, d)
+	    	post updateScore(t,c);
+	    	
+    	--validate corner
+        public validCorner: Tile * Utilities`Pos ==> bool
+	        validCorner(t, d) == (
+	        	
+	    		-- corners of the board
+	    		dcl limit: nat1 := (Utilities`boardSize-1);
+	    		dcl topLeft: Utilities`Pos := mk_Utilities`Pos(0, 0);
+	    		dcl topRight: Utilities`Pos := mk_Utilities`Pos( limit, 0);
+	    		dcl bottomLeft: Utilities`Pos := mk_Utilities`Pos(0, limit);
+	    		dcl bottomRight: Utilities`Pos := mk_Utilities`Pos( limit, limit);
+	    		dcl corners: seq of Utilities`Pos := [topLeft, topRight, bottomLeft, bottomRight];
+				dcl newShape : seq of Utilities`Pos := [];
+
+				--deslocar a peça
+				for all p in set elems t.getShape() do (
+					dcl newPosition: Utilities`Pos := mk_Utilities`Pos(p.x+d.x, p.y+d.y);
+        			
+        			if board(newPosition) <> <empty> then
+        				return false;
+        				
+    				newShape := newShape ^ [newPosition];
+	        	);
+	        	
+	    		--verificar se uma das posições é um corner
+	    		
+	        	if (card ( (elems newShape) inter (elems corners) ) ) = 1 then
+	        		return true;
+
+	        	return false
+	        );
+    	
+        public placeFirstTile: Tile * Utilities`Color * Utilities`Pos ==> bool
+	    	placeFirstTile(t, c, d) == (
+	    		
+	        	for all p in set elems t.getShape() do (	
+        			board := board ++ {mk_Utilities`Pos(p.x+d.x,p.y+d.y) |-> c};
+	        	);
+
+	    		return true;
+	    	)
+	    	pre validCorner(t, d)
+	    	post updateScore(t,c);
+	    	
+    	public updateScore: Tile * Utilities`Color ==> bool
+    		updateScore(t, c) == (
+    			score := score ++ {c |-> (score(c) + len t.getShape())};
+    			return true
+    		);
+    	
         
         public getCurrentPlayer: () ==> Utilities`Color
     		getCurrentPlayer() == return turn;
@@ -99,6 +177,11 @@ class Game
         	getTurn() == (
         		return self.turn
         	);
+        	
+    	public getTiles: () ==> seq of Tile
+    		getTiles() == (
+    			return self.tiles
+    		);
         
         
 	functions
