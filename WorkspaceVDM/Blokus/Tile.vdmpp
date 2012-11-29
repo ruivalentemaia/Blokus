@@ -27,7 +27,6 @@ class Tile
 			return self;
 		)
 		post shape <> [] and corners <> [];
-		--FIXME:valores negativos FUUUUUUUU
         public rotate:() ==> ()
         rotate() == (
         

@@ -37,7 +37,7 @@ class Game
         		
         		--figura 3
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1)];
-        		corners := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(0,1)];
+        		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1)];
         		t := new Tile(shape,corners); 
         		tiles := tiles ^ [t];
         		
@@ -63,13 +63,24 @@ class Game
 	        	
 	        	--verificar se as posiçoes do tabuleiro estao vazias
 	        	for all p in set elems t.getShape() do (
-	        		--FIXME: como se comporta isto se pontos forem extremidades
+
 	        		dcl newPosition: Utilities`Pos := mk_Utilities`Pos(p.x+d.x,p.y+d.y);
+	        		dcl left: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);
+	        		dcl right: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);	        		
+	        		dcl top: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);
+	        		dcl bottom: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);
 	        		
-	        		dcl left: Utilities`Pos := mk_Utilities`Pos(newPosition.x-1,newPosition.y);
-	        		dcl right: Utilities`Pos := mk_Utilities`Pos(newPosition.x+1,newPosition.y);	        		
-	        		dcl top: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y+1);
-	        		dcl bottom: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y-1);
+	        		if ((newPosition.x-1) > 0) then
+	        			left := mk_Utilities`Pos(newPosition.x-1,newPosition.y);
+	        		
+	        		if ((newPosition.x+1) < Utilities`boardSize) then	
+        				right := mk_Utilities`Pos(newPosition.x+1,newPosition.y);
+        				
+        			if ((newPosition.y+1) < Utilities`boardSize) then	        		
+	        			top := mk_Utilities`Pos(newPosition.x,newPosition.y+1);
+	        			
+	        		if ((newPosition.y-1) > 0) then
+	        			bottom := mk_Utilities`Pos(newPosition.x,newPosition.y-1);
 
 	        		-- se posição não estiver vazia ou as sua laterais tiver outra peça da mesma cor então erro
 	        		if board(newPosition) <> <empty> or board(right) = c or board(left) = c or board(top) = c or board(bottom) = c then
@@ -77,10 +88,23 @@ class Game
         			
         			--verificar se há algum canto
         			if p in set elems t.getCorners() then (
-	        			dcl upperLeft: Utilities`Pos := mk_Utilities`Pos(newPosition.x-1,newPosition.y-1);
-	        			dcl upperRight: Utilities`Pos := mk_Utilities`Pos(newPosition.x+1,newPosition.y-1);	        		
-	        			dcl bottomLeft: Utilities`Pos := mk_Utilities`Pos(newPosition.x-1,newPosition.y+1);
-	        			dcl bottomRight: Utilities`Pos := mk_Utilities`Pos(newPosition.x+1,newPosition.y+1);
+	        			dcl upperLeft: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);
+	        			dcl upperRight: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);	        		
+	        			dcl bottomLeft: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);
+	        			dcl bottomRight: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);
+	        			
+	        			if ( (newPosition.x-1) >= 0 and (newPosition.y-1) >= 0) then
+	        				upperLeft := mk_Utilities`Pos(newPosition.x-1,newPosition.y-1);
+        				
+        				if ( (newPosition.x+1)  < Utilities`boardSize and (newPosition.y-1) >= 0) then
+	        				upperRight := mk_Utilities`Pos(newPosition.x+1,newPosition.y-1);
+	        				
+        				if ( (newPosition.x-1) >= 0 and (newPosition.y+1) < Utilities`boardSize) then	        		
+	        				bottomLeft := mk_Utilities`Pos(newPosition.x-1,newPosition.y+1);
+	        				
+        				if ( (newPosition.x+1)  < Utilities`boardSize and (newPosition.y+1)  < Utilities`boardSize) then
+	        				bottomRight := mk_Utilities`Pos(newPosition.x+1,newPosition.y+1);
+	        			
 	        			if board(upperLeft) = c or board(upperRight) = c or board(bottomLeft) = c or board(bottomRight) = c then
 	        				cornerFound := true
     				);
@@ -97,7 +121,7 @@ class Game
 	    		
 	        	for all p in set elems t.getShape() do (
 	        			
-        			board := board munion {mk_Utilities`Pos(p.x+d.x,p.y+d.y) |-> c};
+        			board := board ++ {mk_Utilities`Pos(p.x+d.x,p.y+d.y) |-> c};
 	        	);
 
 	    		return true;

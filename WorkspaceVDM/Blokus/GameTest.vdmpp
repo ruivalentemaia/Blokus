@@ -94,9 +94,6 @@ class GameTest
 	testValidPosition2 () == (
 		
 		dcl g : Game := new Game();
-		dcl t:Tile := hd g.getTiles();
-		t.rotate();
-		AssertTrue(( g.validPosition(hd g.getTiles(), <blue>, mk_Utilities`Pos(0,0)) and g.validPosition(hd g.getTiles(), <blue>, mk_Utilities`Pos(2,1))) = true )
+		AssertTrue( (g.placeFirstTile(hd g.getTiles(), g.getTurn(), mk_Utilities`Pos(0,0)) and g.placeTile(hd g.getTiles(), <blue>, mk_Utilities`Pos(2,1)) ) = true )
 	);
-
 end GameTest
