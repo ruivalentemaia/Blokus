@@ -3,7 +3,8 @@ class Tests
 
 	public runAllTests : () ==> ()
 	runAllTests () == (
-		GameTest`runAllTests()
+		GameTest`runAllTests();
+		TileTest`runAllTests()
 	);
 
 end Tests

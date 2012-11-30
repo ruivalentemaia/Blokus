@@ -5,20 +5,28 @@ class Game
 	
 	instance variables
 		private turn : Utilities`Color := <blue>;
+		private nPlayers : nat1 := 2;
 		private board : map Utilities`Pos to Utilities`Color := { |-> };
 		private tiles : seq of Tile := [];
 		private score : map Utilities`Color to nat := { |-> };
 		
-		inv forall p in set dom board & p.x in set {0,...,Utilities`boardSize-1} and p.y in set {0,...,Utilities`boardSize-1};
+		-- corners of the board
+		private boardLimit: nat1 := (Utilities`boardSize-1);
+		private boardCorners: seq of Utilities`Pos := [mk_Utilities`Pos(0, 0), mk_Utilities`Pos(boardLimit, 0), mk_Utilities`Pos(0, boardLimit), mk_Utilities`Pos(boardLimit, boardLimit)];
+		
+		--invariantes
+		inv nPlayers < 5;
+		inv forall p in set dom board & p.x in set {0,...,boardLimit} and p.y in set {0,...,boardLimit};
 		--FIXME:isto afinal fica para sempre!
 		--inv card (rng board) = 1;
 		
 	operations
         --Initialization
-        public Game: () ==> Game
-	        Game() == (
-	            for all x in set {0, ..., Utilities`boardSize-1} do
-	                for all y in set {0, ..., Utilities`boardSize-1} do
+        public Game: nat1 ==> Game
+	        Game(n) == (
+	        	nPlayers := n;
+	            for all x in set {0, ..., boardLimit} do
+	                for all y in set {0, ..., boardLimit} do
 	                    board := board munion {
 	                        mk_Utilities`Pos(x, y) |-> <empty>
 	                    };
@@ -35,9 +43,33 @@ class Game
         		dcl corners:seq of Utilities`Pos := [];
         		dcl t:Tile;
         		
+        		--figura 1
+        		shape := [mk_Utilities`Pos(0,0)];
+        		corners := [mk_Utilities`Pos(0,0)];
+        		t := new Tile(shape,corners); 
+        		tiles := tiles ^ [t];
+        		
+        		--figura 2
+        		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0)];
+        		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0)];
+        		t := new Tile(shape,corners); 
+        		tiles := tiles ^ [t];
+        		
         		--figura 3
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1)];
         		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1)];
+        		t := new Tile(shape,corners); 
+        		tiles := tiles ^ [t];
+        		
+        		--figura 4
+        		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,0)];
+        		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,0)];
+        		t := new Tile(shape,corners); 
+        		tiles := tiles ^ [t];
+        		
+        		--figura 5
+        		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,1)];
+        		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,1)];
         		t := new Tile(shape,corners); 
         		tiles := tiles ^ [t];
         		
@@ -70,7 +102,7 @@ class Game
 	        		dcl top: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);
 	        		dcl bottom: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);
 	        		
-	        		if ((newPosition.x-1) > 0) then
+	        		if ((newPosition.x-1) >= 0) then
 	        			left := mk_Utilities`Pos(newPosition.x-1,newPosition.y);
 	        		
 	        		if ((newPosition.x+1) < Utilities`boardSize) then	
@@ -79,7 +111,7 @@ class Game
         			if ((newPosition.y+1) < Utilities`boardSize) then	        		
 	        			top := mk_Utilities`Pos(newPosition.x,newPosition.y+1);
 	        			
-	        		if ((newPosition.y-1) > 0) then
+	        		if ((newPosition.y-1) >= 0) then
 	        			bottom := mk_Utilities`Pos(newPosition.x,newPosition.y-1);
 
 	        		-- se posição não estiver vazia ou as sua laterais tiver outra peça da mesma cor então erro
@@ -123,7 +155,6 @@ class Game
 	        			
         			board := board ++ {mk_Utilities`Pos(p.x+d.x,p.y+d.y) |-> c};
 	        	);
-
 	    		return true;
 	    	)
 	    	pre validPosition(t, c, d)
@@ -133,13 +164,6 @@ class Game
         public validCorner: Tile * Utilities`Pos ==> bool
 	        validCorner(t, d) == (
 	        	
-	    		-- corners of the board
-	    		dcl limit: nat1 := (Utilities`boardSize-1);
-	    		dcl topLeft: Utilities`Pos := mk_Utilities`Pos(0, 0);
-	    		dcl topRight: Utilities`Pos := mk_Utilities`Pos( limit, 0);
-	    		dcl bottomLeft: Utilities`Pos := mk_Utilities`Pos(0, limit);
-	    		dcl bottomRight: Utilities`Pos := mk_Utilities`Pos( limit, limit);
-	    		dcl corners: seq of Utilities`Pos := [topLeft, topRight, bottomLeft, bottomRight];
 				dcl newShape : seq of Utilities`Pos := [];
 
 				--deslocar a peça
@@ -154,7 +178,7 @@ class Game
 	        	
 	    		--verificar se uma das posições é um corner
 	    		
-	        	if (card ( (elems newShape) inter (elems corners) ) ) = 1 then
+	        	if (card ( (elems newShape) inter (elems boardCorners) ) ) = 1 then
 	        		return true;
 
 	        	return false
@@ -175,20 +199,29 @@ class Game
     	public updateScore: Tile * Utilities`Color ==> bool
     		updateScore(t, c) == (
     			score := score ++ {c |-> (score(c) + len t.getShape())};
+    			changeTurn();
     			return true
     		);
-    	
-        
-        public getCurrentPlayer: () ==> Utilities`Color
-    		getCurrentPlayer() == return turn;
         	
 		public changeTurn: () ==> ()
 	        changeTurn() == (
 	        
-	            if turn = <blue>
-	                then turn := <yellow>
-	            else
+	            if turn = <blue> then 
+	            	turn := <yellow>
+	            else if nPlayers = 2 then
 	                turn := <blue>
+                else if nPlayers = 3 then (
+                	if turn = <yellow> then
+                		turn := <red>
+            		else
+            			turn := <blue>
+                	)
+            	else if turn = <yellow> then
+            		turn := <red>
+            	else if turn = <red> then
+            		turn := <green>
+        		else
+        			turn := <blue>                
 	        )
 	        post turn <> turn~;
         

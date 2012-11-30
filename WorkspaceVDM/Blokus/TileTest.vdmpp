@@ -1,0 +1,30 @@
+class TileTest
+
+	operations
+	
+		static public AssertTrue : bool ==> ()
+			AssertTrue(a) == return
+	    pre a;
+	    
+		static public runAllTests : () ==> ()
+		runAllTests () == (
+			testTileInvert();
+		);
+		
+		static public testTileInvert : () ==> ()
+		testTileInvert () == (
+		
+			dcl shape:seq of Utilities`Pos := [];
+    		dcl corners:seq of Utilities`Pos := [];
+    		dcl t1 : Tile;
+    		dcl t2 : Tile;
+			shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1)];
+    		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1)];
+			t1 := new Tile(shape,corners);
+			t1.rotate();
+			t2 := new Tile(shape,corners);
+			t2.invert();
+			AssertTrue(t1 <> t2 )
+		);
+
+end TileTest
