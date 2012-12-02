@@ -323,6 +323,11 @@ class Game
     		getTiles() == (
     			return self.tiles
     		);
+    		
+		public getScore: () ==> map Utilities`Color to nat
+    		getScore() == (
+    			return self.score
+    		);
         
         
 	functions
