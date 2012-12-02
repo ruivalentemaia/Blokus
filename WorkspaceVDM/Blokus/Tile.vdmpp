@@ -27,6 +27,7 @@ class Tile
 			return self;
 		)
 		post shape <> [] and corners <> [];
+		
         public rotate:() ==> ()
         rotate() == (
         
@@ -92,7 +93,7 @@ class Tile
         	
         	for all p in set elems shape do (
         		dcl newY: nat := (maxY-p.y);
-        		dcl point: Utilities`Pos := mk_Utilities`Pos( p.y, newY);
+        		dcl point: Utilities`Pos := mk_Utilities`Pos( p.x, newY);
         		
 	        	newShape := newShape ^ [point];
 	        	
