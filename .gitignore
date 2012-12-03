@@ -1,6 +1,9 @@
 # Package Files #
 .gitignore~
 /Workspace/.metadata/
+/Workspace/Blokus/bin/
+/Workspace/Blokus/.settings/
+/Workspace/Blokus/.classpath
 /Workspace/TileRotation/bin/
 /Workspace/TileRotation/.settings/
 /Workspace/TileRotation/.classpath

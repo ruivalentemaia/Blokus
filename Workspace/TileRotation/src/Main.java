@@ -4,38 +4,160 @@ public class Main {
 	public static void main(String[] args) {
 		ArrayList<Pair> figure = new ArrayList<Pair>();
 		
-		
-		//figura 1
-		figure.add(new Pair(0,0));
+		//figura 21
 		figure.add(new Pair(1,0));
 		figure.add(new Pair(0,1));
-/*
+		figure.add(new Pair(1,1));
+		figure.add(new Pair(2,1));
+		figure.add(new Pair(3,1));
+		
+		
+		/*
+		//figura 1
+		figure.add(new Pair(0,0));
+		
+		//figura 2
+		figure.add(new Pair(0,0));
+		figure.add(new Pair(1,0));
+		
+		//figura 3
+		figure.add(new Pair(0,0));
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(1,1));
+		
+		//figura 4
+		figure.add(new Pair(0,0));
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(2,0));
+		
+		//figura 5
+		figure.add(new Pair(0,0));
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(1,1));
+		figure.add(new Pair(0,1));
+		
 		//figura 6
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(1,1));
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(2,1));
+		
+		//figura 7
+		figure.add(new Pair(0,0));
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(2,0));
+		figure.add(new Pair(3,0));
+		
+		//figura 8
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(1,1));
+		figure.add(new Pair(2,1));
+		figure.add(new Pair(2,0));
+		
+		//figura 9
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(1,1));
+		figure.add(new Pair(2,0));
+		
+		//figura 10
+		figure.add(new Pair(0,0));
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(1,1));
+		figure.add(new Pair(2,1));
+		figure.add(new Pair(3,1));
+		
+		//figura 11
+		figure.add(new Pair(0,2));
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(1,1));
+		figure.add(new Pair(1,2));
+		figure.add(new Pair(2,2));
+		
+		//figura 12
 		figure.add(new Pair(0,0));
 		figure.add(new Pair(0,1));
 		figure.add(new Pair(0,2));
+		figure.add(new Pair(1,2));
+		figure.add(new Pair(2,2));
+		
+		//figura 13
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(1,0));
 		figure.add(new Pair(1,1));
-		/*
+		figure.add(new Pair(2,0));
+		figure.add(new Pair(3,0))
+		
+		//figura 14
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(0,2));
+		figure.add(new Pair(1,1));
+		figure.add(new Pair(2,1));
+		figure.add(new Pair(2,0));
+		
+		//figura 15
+		figure.add(new Pair(0,0));
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(0,2));
+		figure.add(new Pair(0,3));
+		figure.add(new Pair(0,4));
+		
 		//figura 16
 		figure.add(new Pair(0,0));
 		figure.add(new Pair(0,1));
 		figure.add(new Pair(0,2));
 		figure.add(new Pair(1,0));
 		figure.add(new Pair(1,1));
+		
+		//figura 17
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(2,0));
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(0,2));
+		figure.add(new Pair(1,1));
+		
+		//figura 18
+		figure.add(new Pair(0,0));
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(0,2));
+		figure.add(new Pair(1,2));
+		
+		//figura 19
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(2,0));
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(1,1));
+		figure.add(new Pair(1,2));
+		
+		//figura 20
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(2,1));
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(1,1));
+		figure.add(new Pair(1,2));
+		
+		//figura 21
+		figure.add(new Pair(1,0));
+		figure.add(new Pair(0,1));
+		figure.add(new Pair(1,1));
+		figure.add(new Pair(2,1));
+		figure.add(new Pair(3,1));
+		
 		*/
-		//variáveis de transformação
+		//variaveis de transformacao
 		int maxX = 0, maxY = 0, newMaxY = 0, newMaxX = 0;
 		
-		for (int i = 0; i< 11; i++) {
+		for (int i = 0; i< 5; i++) {
 			
 			System.out.println("----------------------------------------");
-			for (int y = 0; y < 10; y++) {
+			for (int y = 0; y < 6; y++) {
 	
-				for (int x = 0; x < 10; x++) {
+				for (int x = 0; x < 6; x++) {
 					Pair p = new Pair(x, y);
 					if (figure.contains(p)) {
 						System.out.print(" * |");
-						if (p.x < maxX)
+						if (p.x > maxX)
 							maxX = p.x;
 						
 						if (p.y > maxY)
