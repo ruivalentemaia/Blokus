@@ -18,6 +18,8 @@ public class Main {
 	private static HashMap <Object, ArrayList<Integer>> playedTiles;
 	private static int tileNumber = -1;
 	private static HashMap <Object, Boolean> state;
+	private static ArrayList<Object> winner;
+	private static int bestScore;
 	
 	private static boolean isGameOver() throws CGException {
 		int i = 0;
@@ -38,12 +40,21 @@ public class Main {
 		for (int i = 0; i < keys.length; i++) {
 			if (keys[i] instanceof blue) {
 				System.out.print(keys[i] + ": " + g.getScore().get(keys[i]));
-				
-				if ( state.get(g.getTurn()) ) {
+				if ( state.get(g.getTurn()) ) { 
 					System.out.println(" - Quited");	
 				}
 				else
 					System.out.println();
+				
+				if ((int) g.getScore().get(keys[i]) > bestScore) {
+					winner.clear();
+					winner.add(keys[i]);
+					bestScore = (int) g.getScore().get(keys[i]);
+				}
+				else if ((int) g.getScore().get(keys[i]) == bestScore) {
+					if (!winner.contains(keys[i]))
+						winner.add(keys[i]);
+				}
 			}
 			
 			if (keys[i] instanceof yellow) {
@@ -54,6 +65,16 @@ public class Main {
 				}
 				else
 					System.out.println();
+				
+				if ((int) g.getScore().get(keys[i]) > bestScore) {
+					winner.clear();
+					winner.add(keys[i]);
+					bestScore = (int) g.getScore().get(keys[i]);
+				}
+				else if ((int) g.getScore().get(keys[i]) == bestScore) {
+					if (!winner.contains(keys[i]))
+						winner.add(keys[i]);
+				}
 			}
 			
 			if (keys[i] instanceof red  && nPlayers == 3) {
@@ -64,6 +85,15 @@ public class Main {
 				}
 				else
 					System.out.println();
+				
+				if ((int) g.getScore().get(keys[i]) > bestScore) {
+					winner.clear();
+					winner.add(keys[i]);
+				}
+				else if ((int) g.getScore().get(keys[i]) == bestScore) {
+					if (!winner.contains(keys[i]))
+						winner.add(keys[i]);
+				}
 			}
 			
 			if (keys[i] instanceof green && nPlayers == 4) {
@@ -74,6 +104,16 @@ public class Main {
 				}
 				else
 					System.out.println();
+				
+				if ((int) g.getScore().get(keys[i]) > bestScore) {
+					winner.clear();
+					winner.add(keys[i]);
+					bestScore = (int) g.getScore().get(keys[i]);
+				}
+				else if ((int) g.getScore().get(keys[i]) == bestScore) {
+					if (!winner.contains(keys[i]))
+						winner.add(keys[i]);
+				}
 			}
 		}
 		
@@ -334,7 +374,8 @@ public class Main {
 			g = new Game(nPlayers);
 			
 			initializedPlayedTiles();
-			
+			winner = new ArrayList <Object>();
+			bestScore = 0;
 			String line = "";
 			Tile tile = null;
 			while (!isGameOver()) {
@@ -372,7 +413,15 @@ public class Main {
 	    					System.out.println();
 	    					printScoreboard();
 	    					System.out.println();
-	    					//TODO: END GAME WININGPLAYER
+	    					
+	    					if (winner.size() == 1)
+	    						System.out.println("Parabens ganhou o jogador "+ winner.get(0));
+	    					else {
+	    						System.out.print("Empataram os jogadores ");
+	    						for (int i = 0; i < winner.size(); i++)
+	    							System.out.print(winner.get(i) + " ");
+	    						System.out.println();
+	    					}
 	    					break;
 	    				}
 	    			}
