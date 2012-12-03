@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import jp.co.csk.vdm.toolbox.VDM.CGException;
@@ -9,10 +10,6 @@ import quotes.green;
 import quotes.red;
 import quotes.yellow;
 
-//TODO: Played all tiles +15 if last tile was monomino +20
-//TODO: END GAME
-//TODO: Player quits but the other can continue
-
 public class Main {
 	
 	private static Scanner sc = new Scanner(System.in);
@@ -20,28 +17,70 @@ public class Main {
 	private static int nPlayers = 0;
 	private static HashMap <Object, ArrayList<Integer>> playedTiles;
 	private static int tileNumber = -1;
+	private static HashMap <Object, Boolean> state;
 	
-	public static void printBoard() throws CGException {
-		
+	private static boolean isGameOver() throws CGException {
+		int i = 0;
+		for (ArrayList<Integer> values : playedTiles.values()) {
+			if ( values.size() == g.getTiles().size() )
+				i++;
+		}
+		if (i == nPlayers)
+			return true;
+		return false;
+	}
+	
+	private static void printScoreboard() throws CGException {
 		System.out.println("Scoreboard");
 
 		Object[] keys = g.getScore().keySet().toArray();
 		
 		for (int i = 0; i < keys.length; i++) {
-			if (keys[i] instanceof blue)
-				System.out.println(keys[i] + ": " + g.getScore().get(keys[i]));
+			if (keys[i] instanceof blue) {
+				System.out.print(keys[i] + ": " + g.getScore().get(keys[i]));
+				
+				if ( state.get(g.getTurn()) ) {
+					System.out.println(" - Quited");	
+				}
+				else
+					System.out.println();
+			}
 			
-			if (keys[i] instanceof yellow)
-				System.out.println(keys[i] + ": " + g.getScore().get(keys[i]));
+			if (keys[i] instanceof yellow) {
+				System.out.print(keys[i] + ": " + g.getScore().get(keys[i]));
+				
+				if ( state.get(g.getTurn()) ) {
+					System.out.println(" - Quited");	
+				}
+				else
+					System.out.println();
+			}
 			
-			if (keys[i] instanceof red  && nPlayers == 3)
-				System.out.println(keys[i] + ": " + g.getScore().get(keys[i]));
+			if (keys[i] instanceof red  && nPlayers == 3) {
+				System.out.print(keys[i] + ": " + g.getScore().get(keys[i]));
+				
+				if ( state.get(g.getTurn()) ) {
+					System.out.println(" - Quited");	
+				}
+				else
+					System.out.println();
+			}
 			
-			if (keys[i] instanceof green && nPlayers == 4)
-				System.out.println(keys[i] + ": " + g.getScore().get(keys[i]));
+			if (keys[i] instanceof green && nPlayers == 4) {
+				System.out.print(keys[i] + ": " + g.getScore().get(keys[i]));
+				
+				if ( state.get(g.getTurn()) ) {
+					System.out.println(" - Quited");	
+				}
+				else
+					System.out.println();
+			}
 		}
 		
-	    
+	}
+	
+	public static void printBoard() throws CGException {
+		
 		System.out.println("+-----------------------------------------------------------------------------------------------------------------------+");
 		for (int y = 0; y < 20 ; y++) {
 			System.out.print("|");
@@ -74,6 +113,8 @@ public class Main {
 			
 		}
 		System.out.println("+-----------------------------------------------------------------------------------------------------------------------+");
+		System.out.println();
+		printScoreboard();
 		System.out.println();
 	}
 	
@@ -129,12 +170,16 @@ public class Main {
 	
 	public static Tile chooseTile () throws CGException {
 		
+		Iterator iterator = g.getTiles().iterator();
+		
 		ArrayList<Integer> pt = playedTiles.get(g.getTurn());
 		for (int i = 0; i < g.getTiles().size(); i++) {
 			if (!pt.contains(i)) {
 				System.out.println("Tile " + i);
-				printTile((Tile)g.getTiles().get(i));
+				printTile((Tile)iterator.next());//printTile((Tile)g.getTiles().get(i));
 			}
+			else
+				iterator.next();
 		}
 
 		do {
@@ -146,8 +191,16 @@ public class Main {
 			
 			tileNumber = Integer.parseInt(line);
 		} while (tileNumber < 0 || tileNumber > g.getTiles().size() || pt.contains(tileNumber));
+
+		iterator = g.getTiles().iterator();
 		
-        Tile auxTile = (Tile) g.getTiles().get(tileNumber);
+		int i = 0;
+		while (iterator.hasNext() && i != tileNumber) {
+			i++;
+			iterator.next();
+		}
+		
+        Tile auxTile = (Tile) iterator.next();
         Tile tile = new Tile(auxTile.getShape(), auxTile.getShape());
 		return tile;
 	}
@@ -241,22 +294,31 @@ public class Main {
 	}
 	
 	private static void initializedPlayedTiles() throws CGException {
-		playedTiles = new HashMap <Object, ArrayList<Integer>>();
 		
+		playedTiles = new HashMap <Object, ArrayList<Integer>>();
+		state = new HashMap <Object, Boolean>();
 		Object[] keys = g.getScore().keySet().toArray();
 		
 		for (int i = 0; i < keys.length; i++) {
-			if (keys[i] instanceof blue)
+			if (keys[i] instanceof blue) {
 				playedTiles.put(keys[i], new ArrayList<Integer>());
+				state.put(keys[i],false);
+			}
 			
-			if (keys[i] instanceof yellow)
+			if (keys[i] instanceof yellow) {
 				playedTiles.put(keys[i], new ArrayList<Integer>());
+				state.put(keys[i],false);
+			}
 			
-			if (keys[i] instanceof red  && nPlayers == 3)
+			if (keys[i] instanceof red  && nPlayers == 3) {
 				playedTiles.put(keys[i], new ArrayList<Integer>());
+				state.put(keys[i],false);
+			}
 			
-			if (keys[i] instanceof green && nPlayers == 4)
+			if (keys[i] instanceof green && nPlayers == 4) {
 				playedTiles.put(keys[i], new ArrayList<Integer>());
+				state.put(keys[i],false);
+			}
 		}
 	}
 	
@@ -275,33 +337,48 @@ public class Main {
 			
 			String line = "";
 			Tile tile = null;
-			while (true) {
-				printBoard();
-				
-				int opt = -1;
-				
-				System.out.println(g.getTurn().toString() + " turn!");
-				
-				System.out.println("\t0 - Leave game");
-				System.out.println("\t1 - Place a tile");
-				System.out.println("\t2 - Skip turn");
-                System.out.print("Opcao :> ");
-                
-                line = sc.nextLine();
-    			if (line.isEmpty() || !line.matches("[0-9]"))
-    	            continue;
-
-    			opt = Integer.parseInt(line);
-    			
-    			if (opt == 0)
-    				break;
-    			else if (opt == 1) {
-    				tile = chooseTile();
-    				placeTile(tile);
-    				tile = null;
-    			}
-    			else if (opt == 2)
-    				g.changeTurn();
+			while (!isGameOver()) {
+				if (!state.get(g.getTurn()))
+				{
+					printBoard();
+					int opt = -1;
+					
+					System.out.println(g.getTurn().toString() + " turn!");
+					
+					System.out.println("\t0 - Leave game");
+					System.out.println("\t1 - Place a tile");
+					System.out.println("\t2 - Skip turn");
+					System.out.println("\t3 - Quit turn");
+	                System.out.print("Opcao :> ");
+	                
+	                line = sc.nextLine();
+	    			if (line.isEmpty() || !line.matches("[0-9]"))
+	    	            continue;
+	
+	    			opt = Integer.parseInt(line);
+	    			
+	    			if (opt == 0)
+	    				break;
+	    			else if (opt == 1) {
+	    				tile = chooseTile();
+	    				placeTile(tile);
+	    				tile = null;
+	    			}
+	    			else if (opt == 2)
+	    				g.changeTurn();
+	    			else if (opt == 3) {
+	    				state.put(g.getTurn(), true);
+	    				if (!state.values().contains(false) ) {
+	    					System.out.println();
+	    					printScoreboard();
+	    					System.out.println();
+	    					//TODO: END GAME WININGPLAYER
+	    					break;
+	    				}
+	    			}
+				}
+				else
+					g.changeTurn();
 			}
 
 		}
