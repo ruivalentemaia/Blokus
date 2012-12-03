@@ -7,7 +7,7 @@ class Game
 		private turn : Utilities`Color := <blue>;
 		private nPlayers : nat1 := 2;
 		private board : map Utilities`Pos to Utilities`Color := { |-> };
-		private tiles : seq of Tile := [];
+		private tiles : set of Tile := {};
 		private score : map Utilities`Color to nat := { |-> };
 		
 		-- corners of the board
@@ -25,11 +25,7 @@ class Game
         public Game: nat1 ==> Game
 	        Game(n) == (
 	        	nPlayers := n;
-	            for all x in set {0, ..., boardLimit} do
-	                for all y in set {0, ..., boardLimit} do
-	                    board := board munion {
-	                        mk_Utilities`Pos(x, y) |-> <empty>
-	                    };
+                board := { mk_Utilities`Pos(x, y) |-> <empty> | x,y in set {0, ..., boardLimit}};
                 --initializaze score
 				score := {<blue> |-> 0, <yellow> |-> 0, <red> |-> 0, <green> |-> 0};
 	            initializeTiles()
@@ -47,127 +43,127 @@ class Game
         		shape := [mk_Utilities`Pos(0,0)];
         		corners := [mk_Utilities`Pos(0,0)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 2
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0)];
         		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 3
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1)];
         		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 4
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,0)];
         		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(2,0)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 5
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(0,1)];
         		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(0,1)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 6
         		shape := [mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,1), mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,1)];
         		corners :=  [mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,1)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 7
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,0), mk_Utilities`Pos(3,0)];
         		corners :=  [mk_Utilities`Pos(0,0), mk_Utilities`Pos(3,0)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 8
         		shape := [mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,1), mk_Utilities`Pos(2,1), mk_Utilities`Pos(2,0)];
         		corners :=  [mk_Utilities`Pos(0,1), mk_Utilities`Pos(2,1), mk_Utilities`Pos(2,0)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 9
         		shape := [mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(2,0)];
         		corners := [mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(2,0)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 10
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,1), mk_Utilities`Pos(2,1), mk_Utilities`Pos(3,1)];
         		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(3,1)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 11
         		shape := [mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(1,2), mk_Utilities`Pos(2,2)];
         		corners := [mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,2)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 12
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,2), mk_Utilities`Pos(2,2)];
         		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,2), mk_Utilities`Pos(2,2)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 13
         		shape := [mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(2,0), mk_Utilities`Pos(3,0)];
         		corners := [mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,0), mk_Utilities`Pos(1,1), mk_Utilities`Pos(3,0)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 14
         		shape := [mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,1), mk_Utilities`Pos(2,1), mk_Utilities`Pos(2,0)];
         		corners := [mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(2,1), mk_Utilities`Pos(2,0)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 15
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(0,3), mk_Utilities`Pos(0,4)];
         		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,4)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 16
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,1), mk_Utilities`Pos(1,2)];
         		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,1), mk_Utilities`Pos(1,2)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 17
         		shape := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,1)];
         		corners := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,1)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 18
         		shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,2)];
         		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,2), mk_Utilities`Pos(1,2)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 19
         		shape := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,1), mk_Utilities`Pos(1,2)];
         		corners := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,2)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 20
         		shape := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,1), mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,1), mk_Utilities`Pos(1,2)];
         		corners := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(2,1), mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,2)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         		--figura 21
         		shape := [mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(1,1), mk_Utilities`Pos(2,1), mk_Utilities`Pos(3,1)];
         		corners :=  [mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1), mk_Utilities`Pos(3,1)];
         		t := new Tile(shape,corners); 
-        		tiles := tiles ^ [t];
+        		tiles := tiles union {t};
         		
         	);
         
@@ -319,7 +315,7 @@ class Game
         		return self.turn
         	);
         	
-    	public getTiles: () ==> seq of Tile
+    	public getTiles: () ==> set of Tile
     		getTiles() == (
     			return self.tiles
     		);
