@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import jp.co.csk.vdm.toolbox.VDM.CGException;
@@ -7,14 +9,17 @@ import quotes.green;
 import quotes.red;
 import quotes.yellow;
 
-//TODO:Remove played piece
-//TODO:played all tiles +15 if last tile was monomino +20
+//TODO: Played all tiles +15 if last tile was monomino +20
+//TODO: END GAME
+//TODO: Player quits but the other can continue
 
 public class Main {
 	
 	private static Scanner sc = new Scanner(System.in);
 	private static Game g;
 	private static int nPlayers = 0;
+	private static HashMap <Object, ArrayList<Integer>> playedTiles;
+	private static int tileNumber = -1;
 	
 	public static void printBoard() throws CGException {
 		
@@ -22,20 +27,21 @@ public class Main {
 
 		Object[] keys = g.getScore().keySet().toArray();
 		
-		for (int i = 0; i < nPlayers; i++) {
+		for (int i = 0; i < keys.length; i++) {
 			if (keys[i] instanceof blue)
 				System.out.println(keys[i] + ": " + g.getScore().get(keys[i]));
 			
-			else if (keys[i] instanceof yellow)
+			if (keys[i] instanceof yellow)
 				System.out.println(keys[i] + ": " + g.getScore().get(keys[i]));
 			
-			else if (keys[i] instanceof red  && nPlayers > 2)
+			if (keys[i] instanceof red  && nPlayers == 3)
 				System.out.println(keys[i] + ": " + g.getScore().get(keys[i]));
 			
-			else if (keys[i] instanceof green && nPlayers == 4)
+			if (keys[i] instanceof green && nPlayers == 4)
 				System.out.println(keys[i] + ": " + g.getScore().get(keys[i]));
 		}
-		    
+		
+	    
 		System.out.println("+-----------------------------------------------------------------------------------------------------------------------+");
 		for (int y = 0; y < 20 ; y++) {
 			System.out.print("|");
@@ -108,9 +114,9 @@ public class Main {
             String line = "";
             
             line = sc.nextLine();
-			if (line.isEmpty())
+			if (line.isEmpty() || !line.matches("[0-4]"))
 	            continue;
-            
+			
 			nPlayers = Integer.parseInt(line);
 	        
 	        if (nPlayers == 0)
@@ -123,23 +129,25 @@ public class Main {
 	
 	public static Tile chooseTile () throws CGException {
 		
+		ArrayList<Integer> pt = playedTiles.get(g.getTurn());
 		for (int i = 0; i < g.getTiles().size(); i++) {
-			System.out.println("Tile " + i);
-			printTile((Tile)g.getTiles().get(i));
+			if (!pt.contains(i)) {
+				System.out.println("Tile " + i);
+				printTile((Tile)g.getTiles().get(i));
+			}
 		}
 
-		int t = -1;
 		do {
 	        System.out.print("Choose Tile :> ");
 	        
 	        String line = sc.nextLine();
-			if (line.isEmpty())
+			if (line.isEmpty() || !line.matches("[0-9]*"))
 	            continue;
 			
-			t = Integer.parseInt(line);
-		} while (t < 0 || t > g.getTiles().size() );
+			tileNumber = Integer.parseInt(line);
+		} while (tileNumber < 0 || tileNumber > g.getTiles().size() || pt.contains(tileNumber));
 		
-        Tile auxTile = (Tile) g.getTiles().get(t);
+        Tile auxTile = (Tile) g.getTiles().get(tileNumber);
         Tile tile = new Tile(auxTile.getShape(), auxTile.getShape());
 		return tile;
 	}
@@ -152,7 +160,7 @@ public class Main {
             System.out.print("x-y :> ");		            
             line = sc.nextLine();
             
-			if (line.isEmpty())
+			if (line.isEmpty() || !line.matches("[0-9]{1,2}-[0-9]{1,2}") )
 				return new Integer[]{-1,-1};
 			
 			String[] pos = line.split("-");
@@ -181,7 +189,7 @@ public class Main {
 	            
 	            line = sc.nextLine();
 	            
-				if (line.isEmpty())
+				if (line.isEmpty() || !line.matches("[0-9]") )
 		            continue;
 				
 				opt = Integer.parseInt(line);		
@@ -196,11 +204,14 @@ public class Main {
 					Integer[] pos = readPosition();
 					if (pos[0] == -1)
 						break;
+					
 					Utilities.Pos d = new Utilities.Pos(pos[0], pos[1]);
 					if ( (Integer)g.getScore().get(g.getTurn()) == 0 ) {
 						
 						if (g.validCorner(tile, d)) {
-								g.placeFirstTile(tile, g.getTurn(), d);
+							g.placeFirstTile(tile, g.getTurn(), d);
+							playedTiles.get(g.getTurn()).add(tileNumber);
+							g.updateScore(tile, g.getTurn());
 							break;
 						}
 						else
@@ -210,14 +221,15 @@ public class Main {
 						
 						if (g.validPosition(tile, g.getTurn(), d) ) {
 							g.placeTile(tile, g.getTurn(), d);
+							playedTiles.get(g.getTurn()).add(tileNumber);
+							g.updateScore(tile, g.getTurn());
 							break;
 						}
 						else
 							System.out.println("Invalid position");
 					}
+					
 				} while (true);
-				
-				g.updateScore(tile, g.getTurn());
 				break;
 			}
 			else if (opt == 2)
@@ -228,16 +240,38 @@ public class Main {
 		} while(opt != 0);
 	}
 	
-	public static void main(String[] args) throws CGException {
+	private static void initializedPlayedTiles() throws CGException {
+		playedTiles = new HashMap <Object, ArrayList<Integer>>();
 		
+		Object[] keys = g.getScore().keySet().toArray();
+		
+		for (int i = 0; i < keys.length; i++) {
+			if (keys[i] instanceof blue)
+				playedTiles.put(keys[i], new ArrayList<Integer>());
+			
+			if (keys[i] instanceof yellow)
+				playedTiles.put(keys[i], new ArrayList<Integer>());
+			
+			if (keys[i] instanceof red  && nPlayers == 3)
+				playedTiles.put(keys[i], new ArrayList<Integer>());
+			
+			if (keys[i] instanceof green && nPlayers == 4)
+				playedTiles.put(keys[i], new ArrayList<Integer>());
+		}
+	}
+	
+	public static void main(String[] args) throws CGException {
+			
 		while (true) {
 
 			nPlayers = splashScreen();
-			
+
 	        if (nPlayers == 0)
 	            break;
 
 			g = new Game(nPlayers);
+			
+			initializedPlayedTiles();
 			
 			String line = "";
 			Tile tile = null;
@@ -250,10 +284,11 @@ public class Main {
 				
 				System.out.println("\t0 - Leave game");
 				System.out.println("\t1 - Place a tile");
+				System.out.println("\t2 - Skip turn");
                 System.out.print("Opcao :> ");
                 
                 line = sc.nextLine();
-    			if (line.isEmpty())
+    			if (line.isEmpty() || !line.matches("[0-9]"))
     	            continue;
 
     			opt = Integer.parseInt(line);
@@ -265,6 +300,8 @@ public class Main {
     				placeTile(tile);
     				tile = null;
     			}
+    			else if (opt == 2)
+    				g.changeTurn();
 			}
 
 		}
