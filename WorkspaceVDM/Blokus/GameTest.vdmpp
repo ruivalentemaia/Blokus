@@ -10,6 +10,7 @@ class GameTest
 		runAllTests () == (
 		
 			testInitGame1();
+			testInitGame2();
 			testChangeTurn2();
 			testChangeTurn3();
 			testChangeTurn4();
@@ -17,6 +18,7 @@ class GameTest
 			testValidCorner2();
 			testPlaceFirstTile1();
 			testPlaceFirstTile2();
+			testPlaceFirstTile3();
 			testValidPosition1();
 			testValidPosition2();
 			testValidPosition3();
@@ -26,8 +28,30 @@ class GameTest
 	static public testInitGame1 : () ==> ()
 	testInitGame1 () == (
 		
-		dcl g : Game := new Game(2);
+		dcl g : Game := new Game(4);
 		AssertTrue(card ( rng g.getBoard() ) = 1 );
+		AssertTrue(g.getTurn() = <blue> );
+		g.changeTurn();
+		AssertTrue(g.getTurn() = <yellow> );
+		g.changeTurn();
+		AssertTrue(g.getTurn() = <red> );
+		g.changeTurn();
+		AssertTrue(g.getTurn() = <green> );
+		g.changeTurn();
+		AssertTrue(g.getTurn() = <blue> )
+	);
+	
+	static public testInitGame2 : () ==> ()
+	testInitGame2 () == (
+		
+		dcl g : Game := new Game(3);
+		AssertTrue(card ( rng g.getBoard() ) = 1 );
+		AssertTrue(g.getTurn() = <blue> );
+		g.changeTurn();
+		AssertTrue(g.getTurn() = <yellow> );
+		g.changeTurn();
+		AssertTrue(g.getTurn() = <red> );
+		g.changeTurn();
 		AssertTrue(g.getTurn() = <blue> )
 	);
 	
@@ -105,6 +129,24 @@ class GameTest
 		t.rotate();
 		t.rotate();
 		AssertTrue(g.placeFirstTile(t, g.getTurn(), mk_Utilities`Pos(limit,limit)) = true )
+	);
+	
+	--place tile on bottom right corner
+	static public testPlaceFirstTile3 : () ==> ()
+	testPlaceFirstTile3 () == (
+		
+		dcl g : Game := new Game(2);
+		dcl t:Tile := VDMUtil`set2seq[Tile](g.getTiles())(3);
+		dcl limit: nat := (Utilities`boardSize -2);
+		
+		AssertTrue(g.placeFirstTile(t, g.getTurn(), mk_Utilities`Pos(0,0)) = true );
+		AssertTrue(card ( rng g.getBoard() ) = 2 );
+		
+		t.rotate();
+		t.rotate();
+		AssertTrue(g.placeFirstTile(t, g.getTurn(), mk_Utilities`Pos(limit,limit)) = true );
+		AssertTrue(card ( rng g.getBoard() ) = 3 )
+		
 	);
 	
 	--validate I can place tile here

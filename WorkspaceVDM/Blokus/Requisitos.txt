@@ -1,6 +1,13 @@
+Reqisitos
+Senão tiver como colocar uma peça o jogador pode passar a vez.
+O jogo acaba quando todos os jogadores colocarem todas as peças.
+O jogo acaba quando todos os jogadores desistirem.
+Se um jogador desistir o(s) outtro(s) podem continuar a colocar peças.
+Há vários tipos de peças.
+Peças podem ser transformadas (rodadas/invertidas) antes de serem colocadas no tabuleiro.
+
+Restricoes
 Ordem de inicio : Azul[B], Amarelo[Y], Vermelho[R], Verde[G]
 A primeira peça tem de ser colocada num dos 4 cantos do tabuleiro.
 Todas as peças seguintes têm de tocar canto-a-canto pelo menos 1 peça da mesma cor.
 Arestas de uma peça só se podem tocar se forem de cores diferentes
-Senão tiver como colocar uma peça o jogador pode passar a vez.
-O jogo acaba quando ninguem conseguir realizar uma jogada.
