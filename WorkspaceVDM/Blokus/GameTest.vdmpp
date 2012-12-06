@@ -91,6 +91,7 @@ class GameTest
 	testPlaceFirstTile1 () == (
 		
 		dcl g : Game := new Game(2);
+		dcl score :map Utilities`Color to nat := g.getScore();
 		AssertTrue(g.placeFirstTile(VDMUtil`set2seq[Tile](g.getTiles())(3), g.getTurn(), mk_Utilities`Pos(0,0)) = true )
 	);
 	

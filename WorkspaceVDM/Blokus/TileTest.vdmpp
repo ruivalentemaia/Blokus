@@ -9,6 +9,8 @@ class TileTest
 		static public runAllTests : () ==> ()
 		runAllTests () == (
 			testTileInvert();
+			testTileRotate();
+			testAllTiles();
 		);
 		
 		static public testTileInvert : () ==> ()
@@ -25,6 +27,46 @@ class TileTest
 			t2 := new Tile(shape,corners);
 			t2.invert();
 			AssertTrue(t1 <> t2 )
+		);
+		
+		static public testTileRotate : () ==> ()
+		testTileRotate () == (
+		
+			dcl shape:seq of Utilities`Pos := [];
+    		dcl corners:seq of Utilities`Pos := [];
+    		dcl t1 : Tile;
+    		dcl t2 : Tile;
+			shape := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1)];
+    		corners := [mk_Utilities`Pos(0,0), mk_Utilities`Pos(1,0), mk_Utilities`Pos(0,1)];
+			t1 := new Tile(shape,corners);
+			t1.rotate();
+			t2 := new Tile(shape,corners);
+			AssertTrue(t1 <> t2 )
+		);
+		
+		static public testAllTiles : () ==> ()
+		testAllTiles () == (
+		
+			--dcl allTiles:seq of Tile := VDMUtil`set2seq[Tile](g.getTiles());
+			dcl g : Game := new Game(2);
+			
+			for all tile in set g.getTiles() do (
+				dcl auxTile:Tile := tile;
+				auxTile.rotate();
+				auxTile.invert();
+				auxTile.invert();
+				auxTile.rotate();
+				auxTile.invert();
+				auxTile.invert();
+				auxTile.rotate();
+				auxTile.invert();
+				auxTile.invert();
+				auxTile.rotate();
+				auxTile.invert();
+				auxTile.invert();
+				AssertTrue(tile = auxTile );
+			)
+			
 		);
 
 end TileTest
