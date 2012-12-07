@@ -1,0 +1,25 @@
+\begin{vdm_al}
+class Tests
+ operations
+
+ public runAllTests : () ==> ()
+ runAllTests () == (
+  GameTest`runAllTests();
+  TileTest`runAllTests()
+ );
+
+end Tests
+\end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+runAllTests & 100.0\% & 1 \\
+\hline
+\hline
+Tests.vdmpp & 100.0\% & 1 \\
+\hline
+\end{longtable}
+
