@@ -117,6 +117,7 @@ class GameTest
   
   dcl g : Game := new Game(2);
   dcl score :map Utilities`Color to nat := g.getScore();
+  AssertTrue( card (rng score) = 1);
   AssertTrue(g.placeFirstTile(VDMUtil`set2seq[Tile](g.getTiles())(3), g.getTurn(),
        mk_Utilities`Pos(0,0)) = true )
  );
@@ -197,7 +198,7 @@ end GameTest
 Function or operation & Coverage & Calls \\
 \hline
 \hline
-AssertTrue & 100.0\% & 35 \\
+AssertTrue & 100.0\% & 36 \\
 \hline
 runAllTests & 100.0\% & 1 \\
 \hline
@@ -230,7 +231,7 @@ testValidPosition3 & 100.0\% & 1 \\
 testValidPosition4 & 100.0\% & 1 \\
 \hline
 \hline
-GameTest.vdmpp & 100.0\% & 50 \\
+GameTest.vdmpp & 100.0\% & 51 \\
 \hline
 \end{longtable}
 

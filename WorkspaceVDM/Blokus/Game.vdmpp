@@ -354,11 +354,5 @@ class Game
     		getScore() == (
     			return self.score
     		);
-        
-        
-	functions
--- TODO Define functiones here
 
-	traces
--- TODO Define Combinatorial Test Traces here
 end Game
