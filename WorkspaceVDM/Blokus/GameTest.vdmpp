@@ -99,7 +99,7 @@ class GameTest
 	testValidCorner1 () == (
 		
 		dcl g : Game := new Game(2);
-		AssertTrue(g.validCorner(VDMUtil`set2seq[Tile](g.getTiles())(3), mk_Utilities`Pos(5,5)) = false )--AssertTrue(g.validCorner(g.getTiles()(3), mk_Utilities`Pos(5,5)) = false )
+		AssertTrue(g.validCorner(VDMUtil`set2seq[Tile](g.getTiles())(3), mk_Utilities`Pos(5,5)) = false )
 	);
 	
 	--valid corner
@@ -116,7 +116,8 @@ class GameTest
 		
 		dcl g : Game := new Game(2);
 		dcl score :map Utilities`Color to nat := g.getScore();
-		AssertTrue(g.placeFirstTile(VDMUtil`set2seq[Tile](g.getTiles())(3), g.getTurn(), mk_Utilities`Pos(0,0)) = true )
+		AssertTrue(g.placeFirstTile(VDMUtil`set2seq[Tile](g.getTiles())(3), g.getTurn(),
+							mk_Utilities`Pos(0,0)) = true )
 	);
 	
 	--place tile on bottom right corner
@@ -154,7 +155,8 @@ class GameTest
 	testValidPosition1 () == (
 		
 		dcl g : Game := new Game(2);
-		AssertTrue(g.validPosition(VDMUtil`set2seq[Tile](g.getTiles())(3), <blue>, mk_Utilities`Pos(5,5)) = false )
+		AssertTrue(g.validPosition(VDMUtil`set2seq[Tile](g.getTiles())(3), <blue>,
+							 mk_Utilities`Pos(5,5)) = false )
 	);
 	
 	--validate I can place tile here
@@ -162,7 +164,9 @@ class GameTest
 	testValidPosition2 () == (
 		
 		dcl g : Game := new Game(2);
-		AssertTrue( (g.placeFirstTile(VDMUtil`set2seq[Tile](g.getTiles())(3), g.getTurn(), mk_Utilities`Pos(0,0)) and g.placeTile(VDMUtil`set2seq[Tile](g.getTiles())(3), <blue>, mk_Utilities`Pos(2,2)) ) = true )
+		AssertTrue( (g.placeFirstTile(VDMUtil`set2seq[Tile](g.getTiles())(3), g.getTurn(),
+							mk_Utilities`Pos(0,0)) and g.placeTile(VDMUtil`set2seq[Tile](g.getTiles())(3),
+							<blue>, mk_Utilities`Pos(2,2)) ) = true )
 	);
 	
 	--validate I can place tile here
@@ -170,7 +174,9 @@ class GameTest
 	testValidPosition3 () == (
 		
 		dcl g : Game := new Game(2);
-		AssertTrue( g.placeFirstTile(VDMUtil`set2seq[Tile](g.getTiles())(3), g.getTurn(), mk_Utilities`Pos(0,0)) and g.validPosition(VDMUtil`set2seq[Tile](g.getTiles())(3), <blue>, mk_Utilities`Pos(1,1) ) = false )
+		AssertTrue( g.placeFirstTile(VDMUtil`set2seq[Tile](g.getTiles())(3), g.getTurn(),
+							mk_Utilities`Pos(0,0)) and g.validPosition(VDMUtil`set2seq[Tile](g.getTiles())(3),
+							<blue>, mk_Utilities`Pos(1,1) ) = false )
 	);
 	
 	--validate I can place tile here
@@ -178,6 +184,8 @@ class GameTest
 	testValidPosition4 () == (
 		
 		dcl g : Game := new Game(2);
-		AssertTrue( g.placeFirstTile(VDMUtil`set2seq[Tile](g.getTiles())(3), g.getTurn(), mk_Utilities`Pos(0,0)) and g.validCorner(VDMUtil`set2seq[Tile](g.getTiles())(3), mk_Utilities`Pos(0,0)) = false )
+		AssertTrue( g.placeFirstTile(VDMUtil`set2seq[Tile](g.getTiles())(3), g.getTurn(),
+							mk_Utilities`Pos(0,0)) and g.validCorner(VDMUtil`set2seq[Tile](g.getTiles())(3),
+							mk_Utilities`Pos(0,0)) = false )
 	);
 end GameTest

@@ -1,0 +1,59 @@
+\documentclass[12pt]{report}
+\usepackage{fullpage}
+\usepackage{overture}
+\usepackage[portuguese]{babel} 
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex]{hyperref}
+
+\begin{document}
+
+	\title{Faculdade de Engenharia da Universidade do Porto \\
+			\includegraphics{logo-feup.png} \\
+			\Large Métodos Formais em Engenharia de Software \\
+			\large Blokus}
+
+	\author{Tiago Pereira}
+	\author{Tiago Pereira\\
+		  080509023\\
+		  \texttt{tiago.pereira@fe.up.pt}\\
+		\and
+		  Rui Valente Maia\\
+		  070509176\\
+		  \texttt{ei07176@fe.up.pt}\\}
+
+	\date{December, 2012}
+	\maketitle
+
+	\tableofcontents
+	\listoffigures
+
+	\chapter{Descrição}
+		\input{Descricao.tex}
+
+	\chapter{Lista de requisitos}
+		\input{Requisitos.tex}
+
+	\chapter{Lista de reqstrições}
+		\input{Restricoes.tex}
+
+	\chapter{Classes e scripts de teste}
+
+		\section{Game}
+			\input{specification/Game.vdmpp.tex}
+		\section{GameTest}
+			\input{specification/GameTest.vdmpp.tex}
+		\section{Tests}
+			\input{specification/Tests.vdmpp.tex}
+		\section{Tile}
+			\input{specification/Tile.vdmpp.tex}
+		\section{TileTest}
+			\input{specification/TileTest.vdmpp.tex}
+		\section{Utilities}
+			\input{specification/Utilities.vdmpp.tex}
+
+	\begin{thebibliography}{9}
+		\bibitem{Blokus}
+			Regras do jogo
+			\\*\url{http://en.wikipedia.org/wiki/Blokus}
+	\end{thebibliography}
+\end{document}

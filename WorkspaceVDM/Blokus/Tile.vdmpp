@@ -120,7 +120,7 @@ class Tile
         	
         )
         post shape <> [] and corners <> [];
-        
+
         public getShape: () ==> seq of Utilities`Pos
         	getShape() == (
         		return self.shape

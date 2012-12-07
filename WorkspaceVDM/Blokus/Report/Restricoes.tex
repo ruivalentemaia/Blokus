@@ -1,0 +1,109 @@
+\section{RES1}
+\subsection{Classe}
+Game
+\subsection{Descrição}
+Ordem de inicio : Azul[B], Amarelo[Y], Vermelho[R], Verde[G]
+\subsection{Especificação VDM++}
+\begin{vdm_al}
+public changeTurn: () ==> () 
+	changeTurn() == ( 
+
+		  if turn = <blue> then 
+		  	turn := <yellow> 
+		  else if nPlayers = 2 then 
+		      turn := <blue> 
+		    else if nPlayers = 3 then ( 
+		    	if turn = <yellow> then 
+		    		turn := <red> 
+				else 
+					turn := <blue> 
+		    	) 
+			else if turn = <yellow> then 
+				turn := <red> 
+			else if turn = <red> then 
+				turn := <green> 
+		else 
+			turn := <blue>                
+	) 
+	post turn <> turn~;
+\end{vdm_al}
+
+\section{RES2}
+\subsection{Classe}
+Game
+\subsection{Descrição}
+A primeira peça tem de ser colocada num dos 4 cantos do tabuleiro.
+\subsection{Especificação VDM++}
+\begin{vdm_al}
+public placeFirstTile: Tile * Utilities`Color * Utilities`Pos ==> bool 
+	placeFirstTile(t, c, d) == ( 
+		 
+			for all p in set elems t.getShape() do (	 
+				board := board ++ {mk_Utilities`Pos(p.x+d.x,p.y+d.y) |-> c}; 
+			); 
+
+		return true; 
+	) 
+	pre validCorner(t, d) 
+	post updateScore(t,c);
+\end{vdm_al}
+
+\section{RES3}
+\subsection{Classe}
+Game
+\subsection{Descrição}
+Todas as peças seguintes têm de tocar canto-a-canto pelo menos 1 peça da mesma cor.
+\subsection{Especificação VDM++}
+\begin{vdm_al}
+	for all p in set elems t.getShape() do (
+	.
+	.
+	.
+		if p in set elems t.getCorners() then (
+			dcl upperLeft: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);
+			dcl upperRight: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);	        		
+			dcl bottomLeft: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);
+			dcl bottomRight: Utilities`Pos := mk_Utilities`Pos(newPosition.x,newPosition.y);
+	
+			if ( (newPosition.x-1) >= 0 and (newPosition.y-1) >= 0) then
+				upperLeft := mk_Utilities`Pos(newPosition.x-1,newPosition.y-1);
+	
+			if ( (newPosition.x+1)  < Utilities`boardSize and (newPosition.y-1) >= 0) then
+				upperRight := mk_Utilities`Pos(newPosition.x+1,newPosition.y-1);
+		
+			if ( (newPosition.x-1) >= 0 and (newPosition.y+1) < Utilities`boardSize) then	        		
+				bottomLeft := mk_Utilities`Pos(newPosition.x-1,newPosition.y+1);
+		
+			if ( (newPosition.x+1)  < Utilities`boardSize
+		and (newPosition.y+1)  < Utilities`boardSize) then
+				bottomRight := mk_Utilities`Pos(newPosition.x+1,newPosition.y+1);
+	
+			if board(upperLeft) = c or board(upperRight) = c or board(bottomLeft) = c
+		or board(bottomRight) = c then
+				cornerFound := true
+		);
+		);
+
+		if cornerFound then
+			return true;
+\end{vdm_al}
+
+\section{RES4}
+\subsection{Classe}
+Game
+\subsection{Descrição}
+Arestas de uma peça só se podem tocar se forem de cores diferentes.
+\subsection{Especificação VDM++}
+\begin{vdm_al}
+if board(newPosition) <> <empty> or board(right) = c or board(left) = c 
+	or board(top) = c or board(bottom) = c then 
+return false;
+\end{vdm_al}
+
+\section{RES5}
+\subsection{Classe}
+Game
+\subsection{Descrição}
+\subsection{Especificação VDM++}
+\begin{vdm_al}
+\end{vdm_al}
